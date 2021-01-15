@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Log;
+use App\Events\UserLoggedIn;
 
 class RegisterController extends Controller
 {
@@ -77,8 +78,11 @@ class RegisterController extends Controller
             'budget' => $data['budget'],
 
         ]);
-
+         $user=User::find(1);
      Log::channel('single')->info("Email id is ". $data['email'] ." passwordss ".$data['password']);
+    event(new UserLoggedIn($user));
+
+
     // $data1 = [
     //        'email' => $data['email'],
     //        'password' => $data['password']
