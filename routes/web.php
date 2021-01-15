@@ -1,4 +1,9 @@
 <?php
+use Illuminate\Http\Request;
+
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderShipped;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +33,26 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('testing', function(){
+
+	$data1 = [
+           'email' => 'vikasv087@gmail.com',
+           'password' => 657575987,
+       ];
+       $email = 'vikasv087@gmail.com';
+       //echo $data1['email'];
+      \Mail::send(['text'=>'mail'], $data1, function($message) use ($email) {
+        $message->to($email, 'fumes')->subject('test email');
+        $message->from('vikashverma003@gmail.com', 'check');
+
+    });
+});
+
+Route::get('markdown',function(){
+	    $order=['a'=>'sd','c'=>'qwqw'];
+	    $m="vikasv087@gmail.com";
+        Mail::to($m)->send(new OrderShipped($order));
+
+
+});
