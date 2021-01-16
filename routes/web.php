@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
-
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,9 +50,18 @@ Route::get('testing', function(){
 });
 
 Route::get('markdown',function(){
-	    $order=['a'=>'sd','c'=>'qwqw'];
+	    $order=User::find(1);
 	    $m="vikasv087@gmail.com";
         Mail::to($m)->send(new OrderShipped($order));
 
 
 });
+
+
+/* For the queue system we use the following commands
+php artisan queue:table and then migrate the job table
+php artisan queue:work  for queue server  and just use implements ShouldQueue inside the ordershipped for proper working
+
+and change the QUEUE_CONNECTION =sync to database 
+
+  */

@@ -6,19 +6,20 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
-class OrderShipped extends Mailable
+use App\User;
+class OrderShipped extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
+    public $order;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
         //
+        $this->user=$user;
     }
 
     /**
