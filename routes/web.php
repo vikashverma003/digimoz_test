@@ -5,6 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
 use App\User;
+use App\Post;
+
+use App\Profile;
+
+use App\Author;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,3 +71,28 @@ php artisan queue:work  for queue server  and just use implements ShouldQueue in
 and change the QUEUE_CONNECTION =sync to database 
 
   */
+
+Route::get('get_a',function(){
+
+// // get data from the posts side there has to be author_id inside the posts table for proper working
+
+/*$post=Post::with('author')->get();echo "<pre>";
+$post->map(function ($post) {
+    echo $post->author->name ."<br>";
+ }); */
+
+// get data from the profile side there has to be author_id inside the Profile table for proper working
+/*$post=Profile::with('author')->get();echo "<pre>";
+$post->map(function ($post) {
+    echo $post->author->name ."<br>";
+ }); */
+
+// In both the tabel author_id must be present .
+$post=Author::with(['profile','posts'])->get();echo "<pre>";
+// $post->map(function ($post) {
+//     echo $post->author->name ."<br>";
+//  });
+
+print_r($post);
+
+});
