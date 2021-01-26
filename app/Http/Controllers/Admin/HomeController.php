@@ -7,6 +7,10 @@ use App\User;
 use Response;
 use DB;
 use File;
+use App\Post;
+
+use App\Author;
+
 
 class HomeController extends Controller
 {
@@ -48,4 +52,20 @@ class HomeController extends Controller
             );
             return Response::download($filename, $c_file.".csv", $headers);
     }
+
+    public function group_by(Request $request){
+
+           //  $matches =  Post::select(DB::raw('title AS AuthorPosts'))
+           // ->groupBy('author_id')
+           // ->get();
+
+        $t=Author::select(DB::raw('MONTH(created_at) as month'),DB::raw('count(name) as names'),DB::raw('count(id) as `data`') )->groupBy(DB::raw('MONTH(created_at)'))->get();
+echo "<pre>";
+           print_r($t);
+
+    }
+
+
+
+
 }

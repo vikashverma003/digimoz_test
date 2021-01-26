@@ -10,7 +10,6 @@ use App\Post;
 use App\Profile;
 
 use App\Author;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,14 +27,22 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::namespace("Admin")->prefix('admin')->group(function(){
-	Route::get('/', 'HomeController@index')->name('admin.home');
-    Route::get('/download_csv', 'HomeController@download_csv')->name('admin.download_csv');
-
-	Route::namespace('Auth')->group(function(){
+   
+	  Route::namespace('Auth')->group(function(){
 		Route::get('/login', 'LoginController@showLoginForm')->name('admin.login');
 		Route::post('/login', 'LoginController@login');
 		Route::post('logout', 'LoginController@logout')->name('admin.logout');
-	});
+	  });
+
+    Route::middleware(['auth:admin'])->group(function(){
+    Route::get('/', 'HomeController@index')->name('admin.home');
+    Route::get('/download_csv', 'HomeController@download_csv')->name('admin.download_csv');
+
+    Route::get('/group_by', 'HomeController@group_by')->name('admin.group_by');
+
+    });
+
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -76,10 +83,11 @@ Route::get('get_a',function(){
 
 // // get data from the posts side there has to be author_id inside the posts table for proper working
 
-/*$post=Post::with('author')->get();echo "<pre>";
-$post->map(function ($post) {
-    echo $post->author->name ."<br>";
- }); */
+//$post=Post::with('author')->get();echo "<pre>";
+// $post->map(function ($post) {
+//     echo $post->author->name ."<br>";
+
+//  }); 
 
 // get data from the profile side there has to be author_id inside the Profile table for proper working
 /*$post=Profile::with('author')->get();echo "<pre>";
@@ -88,11 +96,34 @@ $post->map(function ($post) {
  }); */
 
 // In both the tabel author_id must be present .
-$post=Author::with(['profile','posts'])->get();echo "<pre>";
+//$post=Author::with(['profile','posts'])->get();echo "<pre>";
 // $post->map(function ($post) {
 //     echo $post->author->name ."<br>";
 //  });
+//$post=Author::with(['profile','posts'])->get()->toArray();echo "<pre>";
+//$post=Profile::with('author')->get();
 
-print_r($post);
+//echo "<pre>";
+
+
+// $post->map(function ($post) {
+//     echo $post->author->name ."<br>";
+//  }); 
+
+// Inner query for author
+/*$products = Post::whereHas('author', function($q) {
+   $q->where('id','<=',5);
+})->get();*/
+
+
+// Inner query for post
+
+$products = Post::with('author')->where('id','>',5)->get();
+
+
+echo "<pre>";
+
+print_r($products);
 
 });
+
