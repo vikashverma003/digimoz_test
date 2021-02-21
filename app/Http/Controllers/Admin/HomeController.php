@@ -60,10 +60,21 @@ class HomeController extends Controller
            // ->get();
 
         $t=Author::select(DB::raw('MONTH(created_at) as month'),DB::raw('count(name) as names'),DB::raw('count(id) as `data`') )->groupBy(DB::raw('MONTH(created_at)'))->get();
-echo "<pre>";
+        echo "<pre>";
            print_r($t);
 
     }
+
+    public function show_sidebar(){
+
+        return view('sidebar');
+    }
+    public function sub_admin(){
+
+        return view('sub_admin_sidebar');
+    }
+
+
 
 
 

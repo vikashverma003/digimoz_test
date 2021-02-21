@@ -26,6 +26,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get("addmoney/stripe/{id}/{sponsor_id?}", array("as" => "addmoney.paywithstripe","uses" => "AddMoneyController@payWithStripe"));
+Route::post("addmoney/stripe/{id}/{sponsor_id?}", array("as" => "addmoney.stripe","uses" => "AddMoneyController@postPaymentWithStripe"));
+
 Route::namespace("Admin")->prefix('admin')->group(function(){
    
 	  Route::namespace('Auth')->group(function(){
@@ -34,14 +37,17 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 		Route::post('logout', 'LoginController@logout')->name('admin.logout');
 	  });
 
-    Route::middleware(['auth:admin'])->group(function(){
+
+    Route::middleware(['auth:admin','isSuper'])->group(function(){
     Route::get('/', 'HomeController@index')->name('admin.home');
     Route::get('/download_csv', 'HomeController@download_csv')->name('admin.download_csv');
+    Route::get('/dashboard', 'HomeController@show_sidebar')->name('admin.dashboard');
 
-    Route::get('/group_by', 'HomeController@group_by')->name('admin.group_by');
+    Route::get('/group_by', 'HomeController@group_by')->name('admin.group_by')->middleware('isSuper');
+
+    Route::get('/sub_admin', 'HomeController@sub_admin')->name('admin.sub_admin');
 
     });
-
 
 });
 
